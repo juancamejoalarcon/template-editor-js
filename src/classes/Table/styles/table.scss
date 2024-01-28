@@ -182,9 +182,16 @@
   overflow: hidden;
   outline: none;
   line-break: normal;
+  position: relative;
 
   &--selected {
     background: var(--color-background);
+  }
+
+  &:hover {
+    .tc-delete-cell-button {
+      display: inline-block;
+    }
   }
 }
 
@@ -201,9 +208,22 @@
   }
   .endif {
     position: absolute;
-    margin-top: 35px;
+    bottom: 0;
+    margin-bottom: -25px;
   }
   & + .tc-row {
     border-top: 1px solid var(--color-border);
   }
+}
+
+.tc-delete-cell-button {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3C!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--%3E%3Cpath d='M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  right: 0;
+  top: 0;
+  display: none;
+  cursor: pointer;
 }

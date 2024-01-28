@@ -25,7 +25,9 @@ const CSS = {
   cellSelected: 'tc-cell--selected',
   addRow: 'tc-add-row',
   addColumn: 'tc-add-column',
-  ifCondition: 'tc-if-condition'
+  ifCondition: 'tc-if-condition',
+  deleteCellButton: 'tc-delete-cell-button',
+  cellContent: 'cell-content',
 };
 
 /**
@@ -599,9 +601,41 @@ export default class Table {
    * @return {Element}
    */
   createCell() {
-    return $.make('div', CSS.cell, {
+    const cell = $.make('div', CSS.cell, {
       contentEditable: !this.readOnly
     });
+
+    this.addCellContent(cell)
+    this.addDeleteCellButton(cell)
+    return cell
+  }
+
+    /**
+   * Add cell content area
+   *
+   * @param {Element} cell - cell to add the delete button
+  */
+    addCellContent(cell) {
+      const button = $.make('div', CSS.cellContent, {
+        contentEditable: !this.readOnly
+      });
+      cell.appendChild(button)
+    }
+
+  /**
+   * Adds button to delete cell
+   *
+   * @param {Element} cell - cell to add the delete button
+  */
+  addDeleteCellButton(cell) {
+    const button = $.make('div', CSS.deleteCellButton, {
+      contentEditable: this.readOnly
+    });
+    cell.prepend(button)
+    button.addEventListener('click', () => {
+      // cell.remove()
+      cell.style.display = 'none'
+    })
   }
 
   /**
@@ -666,7 +700,17 @@ export default class Table {
         return true;
       }
 
-      this.moveCursorToNextRow();
+      const cell = this.focusedCellElem
+
+      for (let index = 0; index < 2; index++) {
+        const lineBreak = document.createElement('br')
+        cell.querySelector(`.${CSS.cellContent}`).appendChild(lineBreak)
+      }
+
+      document.execCommand('selectAll', false, null);
+      document.getSelection().collapseToEnd();
+
+      // this.moveCursorToNextRow();
     }
 
     return event.key !== 'Enter';
@@ -978,7 +1022,7 @@ export default class Table {
     for (let i = 1; i <= this.numberOfRows; i++) {
       const row = this.table.querySelector(`.${CSS.row}:nth-child(${i})`);
       const cells = Array.from(row.querySelectorAll(`.${CSS.cell}`));
-      const isEmptyRow = cells.every(cell => !cell.textContent.trim());
+      const isEmptyRow = cells.every(cell => !cell.querySelector(`.${CSS.cellContent}`).textContent.trim());
 
       if (isEmptyRow) {
         continue;
@@ -987,7 +1031,9 @@ export default class Table {
       if (ifCondition) {
         data.push(['if', ifCondition.getAttribute('condition')])
       }
-      data.push(cells.map(cell => cell.innerHTML));
+
+      const cellIsHidden = (cell) => cell.style.display === 'none'
+      data.push(cells.filter(cell => !cellIsHidden(cell)).map(cell => cell.querySelector(`.${CSS.cellContent}`).innerHTML));
       if (ifCondition) data.push(['endif', 'condition'])
     }
 
