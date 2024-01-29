@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { TemplateEditor } from "./classes/TemplateEditor";
-  import {transformToEjs} from './services/transform-to-ejs.service'
+  import { transformToEjs } from './services/transform-to-ejs.service'
 
   let editor = null;
 

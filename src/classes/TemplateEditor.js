@@ -6,6 +6,7 @@ import List from "@editorjs/list";
 // import Table from '@editorjs/table'
 // import Table from 'editorjs-table'
 import Table from './Table'
+import Columns from './Columns'
 
 // import { ShowIfPlugin } from '../plugins/show-if';
 import { IfCondition } from './IfCondition';
@@ -16,6 +17,7 @@ import { InsertVariable } from './InsertVariable';
 
 import { indentConditions } from '../services/condition.service'
 import { onSelectionChanged } from '../services/selection.service'
+
 
 export class TemplateEditor {
 
@@ -104,6 +106,7 @@ export class TemplateEditor {
                 IfConditionInline,
                 IfElseCondition,
                 InsertVariable,
+                Columns,
                 ...tools
             },
         })
