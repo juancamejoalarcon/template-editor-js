@@ -7,6 +7,7 @@ import List from "@editorjs/list";
 // import Table from 'editorjs-table'
 import Table from './Table'
 import Columns from './Columns'
+import Image from './Image'
 
 // import { ShowIfPlugin } from '../plugins/show-if';
 import { IfCondition } from './IfCondition';
@@ -101,12 +102,13 @@ export class TemplateEditor {
                         defaultStyle: 'unordered'
                     }
                 },
+                image: Image,
+                Columns,
                 IfCondition,
                 IfEndCondition,
                 IfConditionInline,
                 IfElseCondition,
                 InsertVariable,
-                Columns,
                 ...tools
             },
         })
