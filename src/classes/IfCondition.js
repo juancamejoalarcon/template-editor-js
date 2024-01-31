@@ -1,4 +1,4 @@
-import logicIcon from '../assets/icons/logic-icon.svg?raw'
+import logicIcon from '@/assets/icons/logic-icon.svg?raw'
 import IfConditionComponent from '../components/IfConditionComponent.svelte'
 
 import state from '../services/state.service';

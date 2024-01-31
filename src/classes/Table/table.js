@@ -239,7 +239,7 @@ export default class Table {
           }
         },
         {
-          label: this.api.i18n.t('Show IF'),
+          label: this.api.i18n.t('IF'),
           icon: LogicIcon,
           onClick: () => {
             this.addConditionToRow(this.selectedRow)
