@@ -5,7 +5,7 @@ export class IfElseCondition {
 
     static get toolbox() {
         return {
-            title: "ELSE condition",
+            title: "ELSE",
             icon: logicIcon,
         };
     }

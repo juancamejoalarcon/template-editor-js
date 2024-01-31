@@ -4,11 +4,12 @@
   import { transformToEjs } from './services/transform-to-ejs.service'
 
   let editor = null;
+  const placeholder = 'Start writing here'
 
   onMount(() => {
     editor = new TemplateEditor({
       holder: "editorjs",
-      placeholder: "Let`s write an awesome story!",
+      placeholder,
     });
   });
 

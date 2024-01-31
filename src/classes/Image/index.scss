@@ -50,3 +50,9 @@
   max-width: none;
   width: 100%;
 }
+
+.cdx-simple-image__picture--hidden-caption {
+  & + .cdx-simple-image__caption {
+    display: none;
+  }
+}

@@ -15,6 +15,7 @@
 
 <style lang="scss">
   .condition-input {
-    background-color: yellow;
+    background-color: #EFF0F1;
+    font-family: monospace;
   }
 </style>

@@ -7,7 +7,7 @@ export class IfCondition {
 
     static get toolbox() {
         return {
-            title: "IF condition",
+            title: "IF",
             icon: logicIcon,
         };
     }
@@ -25,6 +25,9 @@ export class IfCondition {
             props: {
                 conditionChanged: (condition) => {
                     this.condition = condition
+                },
+                onRemove: () => {
+                    console.log('--remove condition--')
                 }
             }
         })

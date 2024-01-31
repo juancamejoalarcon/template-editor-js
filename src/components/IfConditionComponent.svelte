@@ -37,7 +37,8 @@
     }
   }
   .condition-input {
-    background-color: yellow;
+    background-color: #EFF0F1;
+    font-family: monospace;
     &-edit {
       border: none;
       outline: none;

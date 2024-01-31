@@ -8,6 +8,7 @@ import List from "@editorjs/list";
 import Table from './Table'
 import Columns from './Columns'
 import Image from './Image'
+import Paragraph from './Paragraph';
 
 // import { ShowIfPlugin } from '../plugins/show-if';
 import { IfCondition } from './IfCondition';
@@ -61,6 +62,7 @@ export class TemplateEditor {
                 onChange()
             },
             tools: {
+                paragraph: Paragraph,
                 header: {
                     class: Header,
                     inlineToolbar: true,
