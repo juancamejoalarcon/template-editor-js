@@ -1,7 +1,8 @@
 import logicIcon from '@/assets/icons/logic-icon.svg?raw'
 import ConditionComponent from '@/components/ConditionComponent.svelte'
-
 import state from '@/services/state.service';
+
+const defaultCondition = 'condicion == resultado'
 
 export class IfCondition {
 
@@ -12,10 +13,13 @@ export class IfCondition {
         };
     }
 
-    constructor({ api, data = { skipEndBlock: false } }) {
+    constructor({ api, data = { skipEndBlock: false, type: '', condition: '' } }) {
         this.api = api
 
-        this.skipEndBlock = data.skipEndBlock
+        if (!state.api) state.setApi(api)
+
+        this.skipEndBlock = data.skipEndBlock || data.type
+        this.condition = data.condition || defaultCondition
     }
 
     render() {
@@ -24,6 +28,7 @@ export class IfCondition {
             target,
             props: {
                 statement: 'IF',
+                condition: this.condition,
                 conditionChanged: (condition) => {
                     this.condition = condition
                 },

@@ -6,6 +6,10 @@ class State {
     setPreventDestroyFunctToFire(value) {
         this.preventDestroyFunctToFireFlag = value
     }
+
+    setApi(API) {
+        this.api = API
+    }
 }
 
 export default new State()

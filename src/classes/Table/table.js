@@ -431,7 +431,7 @@ export default class Table {
       target: ifConditionContainer, 
       props: {
         statement: 'IF',
-        inline: true, 
+        inline: false, 
         onRemove: () => {
           ifConditionContainer.remove()
           endifConditionContainer.remove()

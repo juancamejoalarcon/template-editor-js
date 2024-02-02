@@ -1,4 +1,5 @@
 import ConditionComponent from '@/components/ConditionComponent.svelte'
+import { getConditionContainers, onRemoveObserver } from '@/services/condition.service'
 
 export class IfConditionInline {
     static get isInline() {
@@ -15,6 +16,7 @@ export class IfConditionInline {
         this.button.type = 'button';
         this.button.classList.add('ce-inline-tool')
         this.button.classList.add('add-condition-button')
+        this.button.classList.add('add-condition-button-if')
 
         return this.button;
     }
@@ -22,28 +24,10 @@ export class IfConditionInline {
     surround(range) {
 
 
+        const randomId = 'condition-id-' + (Math.random() + 1).toString(36).substring(7);
         const selectedText = range.extractContents();
 
-        const ifConditionContainer = document.createElement('span');
-        new ConditionComponent({ 
-            target: ifConditionContainer, 
-            props: {
-                statement: 'IF',
-                inline: true,
-            } 
-        })
-        ifConditionContainer.setAttribute('contenteditable', 'false')
-
-        const endifConditionContainer = document.createElement('span');
-        new ConditionComponent({ 
-            target: endifConditionContainer, 
-            props: {
-                statement: 'ENDIF',
-                inline: true,
-                isEnd: true
-            } 
-        })
-        endifConditionContainer.setAttribute('contenteditable', 'false')
+        const { ifConditionContainer, endifConditionContainer } = getConditionContainers(randomId)
 
         range.insertNode(ifConditionContainer);
 
@@ -53,6 +37,8 @@ export class IfConditionInline {
 
         insertAfter(endifConditionContainer, ifConditionContainer)
         insertAfter(selectedText, ifConditionContainer)
+
+        onRemoveObserver(ifConditionContainer, randomId)
     }
 
    

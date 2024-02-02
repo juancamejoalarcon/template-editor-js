@@ -1,27 +1,40 @@
 import edjsHTML from 'editorjs-html'
 
-function IfCondition({data}){
-    return `<% if (${data.condition}) { %>`
-}
 
-function ElseCondition({data}){
-    return `<% } else if (${data.condition}) { %>`
-}
+export const transformToEjs = (editorData) => {
 
-function EndCondition({data}){
-    return `<% } %>`
-}
+    const cloneData = JSON.parse(JSON.stringify(editorData))
 
+    cloneData.blocks.forEach(block => {
+        if (block.type === 'header' || block.type === 'paragraph') {
+            const parsedText = document.createElement('div')
+            parsedText.innerHTML = block.data.text
 
-export const transformToEjs = (blocksData) => {
+            parsedText.querySelectorAll('.condition-start').forEach((conditionEl) => {
+                const condition = conditionEl.querySelector('.condition-input-edit').textContent
+                let textNode = document.createTextNode(`<% if (${condition}) { %>`);
+                conditionEl.replaceWith(textNode)
+            })
+            parsedText.querySelectorAll('.condition-end').forEach((conditionEl) => {
+                let textNode = document.createTextNode(`<% endif %>`);
+                conditionEl.replaceWith(textNode)
+            })
 
-    const edjsParser2 = edjsHTML({
-        IfCondition,
-        ElseCondition,
-        EndCondition
+            let inner = parsedText.innerHTML
+            inner = inner.replaceAll('&lt;', '<')
+            inner = inner.replaceAll('&gt;', '>')
+
+            block.data.text = inner
+        }
     });
 
-    const parsed = edjsParser2.parse(blocksData);
+    const edjsParser = edjsHTML({
+        IfCondition: ({data}) => `<% if (${data.condition}) { %>`,
+        ElseCondition: ({data}) => `<% } else if (${data.condition}) { %>`,
+        EndCondition: ({data}) => `<% } %>`
+    });
+
+    const parsed = edjsParser.parse(cloneData);
 
     
 

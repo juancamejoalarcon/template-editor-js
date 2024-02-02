@@ -13,8 +13,9 @@ import { EndCondition } from './Conditions/EndCondition';
 import { IfConditionInline } from './Conditions/InlineIfCondition';
 import { InsertVariable } from './InsertVariable';
 
-import { indentConditions } from '../services/condition.service'
+import { indentConditions, reapplyConditionsToBlocks } from '../services/condition.service'
 import { onSelectionChanged } from '../services/selection.service'
+import state from '@/services/state.service'; 
 
 
 export class TemplateEditor {
@@ -24,20 +25,22 @@ export class TemplateEditor {
         placeholder,
         onReady = () => { },
         onChange = () => { },
-        tools = {}
+        tools = {},
+        data = {}
     } = {}) {
 
         if (!holder) throw new Error('Missing holder container')
 
-        this.init({ holder, placeholder, onReady, onChange, tools })
+        this.init({ holder, placeholder, onReady, onChange, tools, data })
 
         return this.editor
     }
 
-    init({ holder, placeholder, onReady = () => { }, onChange = () => { }, tools = {} }) {
+    init({ holder, placeholder, onReady = () => { }, onChange = () => { }, tools = {}, data }) {
         this.editor = new EditorJS({
             holder,
             placeholder,
+            data,
             onReady: () => {
                 this.editor.on('block changed', ({ event }) => {
                     const { type } = event
@@ -50,6 +53,11 @@ export class TemplateEditor {
                 document.addEventListener("mouseup", () => {
                     onSelectionChanged(this.api)
                 }, false);
+
+                setTimeout(() => {
+                    indentConditions(state.api)
+                    reapplyConditionsToBlocks(state.api)
+                }, 50);
 
                 onReady()
             },
@@ -100,11 +108,16 @@ export class TemplateEditor {
                         defaultStyle: 'unordered'
                     }
                 },
+                If: {
+                    class: IfConditionInline,
+                    config: {
+
+                    }
+                },
                 image: Image,
-                Columns,
+                // Columns,
                 IfCondition,
                 EndCondition,
-                IfConditionInline,
                 ElseCondition,
                 InsertVariable,
                 IfConditionTune,

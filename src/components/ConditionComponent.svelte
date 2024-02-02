@@ -51,6 +51,13 @@
         display: inline-block;
       }
     }
+    &.inline {
+      .close-icon {
+        margin-left: -22px;
+        margin-top: -5px;
+        top: auto;
+      }
+    }
   }
   .condition-input {
     background-color: #EFF0F1;
