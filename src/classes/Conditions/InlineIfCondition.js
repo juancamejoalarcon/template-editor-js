@@ -1,5 +1,4 @@
-import IfConditionComponent from '../components/IfConditionComponent.svelte'
-import IfEndConditionComponent from '../components/IfEndConditionComponent.svelte'
+import ConditionComponent from '@/components/ConditionComponent.svelte'
 
 export class IfConditionInline {
     static get isInline() {
@@ -26,11 +25,24 @@ export class IfConditionInline {
         const selectedText = range.extractContents();
 
         const ifConditionContainer = document.createElement('span');
-        new IfConditionComponent({ target: ifConditionContainer, props: { inline: true } })
+        new ConditionComponent({ 
+            target: ifConditionContainer, 
+            props: {
+                statement: 'IF',
+                inline: true,
+            } 
+        })
         ifConditionContainer.setAttribute('contenteditable', 'false')
 
         const endifConditionContainer = document.createElement('span');
-        new IfEndConditionComponent({ target: endifConditionContainer, props: { inline: true } })
+        new ConditionComponent({ 
+            target: endifConditionContainer, 
+            props: {
+                statement: 'ENDIF',
+                inline: true,
+                isEnd: true
+            } 
+        })
         endifConditionContainer.setAttribute('contenteditable', 'false')
 
         range.insertNode(ifConditionContainer);

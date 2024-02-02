@@ -1,7 +1,7 @@
 import logicIcon from '@/assets/icons/logic-icon.svg?raw'
-import IfConditionComponent from '../components/IfConditionComponent.svelte'
+import ConditionComponent from '@/components/ConditionComponent.svelte'
 
-import state from '../services/state.service';
+import state from '@/services/state.service';
 
 export class IfCondition {
 
@@ -20,14 +20,16 @@ export class IfCondition {
 
     render() {
         const target = document.createElement("div");
-        const app = new IfConditionComponent({
+        const app = new ConditionComponent({
             target,
             props: {
+                statement: 'IF',
                 conditionChanged: (condition) => {
                     this.condition = condition
                 },
                 onRemove: () => {
-                    console.log('--remove condition--')
+                    const index = this.api.blocks.getCurrentBlockIndex()
+                    this.api.blocks.delete(index)
                 }
             }
         })
@@ -38,7 +40,7 @@ export class IfCondition {
     addEndBlock() {
         if (this.skipEndBlock) return
         const index = this.api.blocks.getCurrentBlockIndex() + 1
-        this.api.blocks.insert("IfEndCondition", {}, {}, index, true);
+        this.api.blocks.insert("EndCondition", {}, {}, index, true);
     }
 
     destroy() {
@@ -59,7 +61,8 @@ export class IfCondition {
         const blockCount = this.api.blocks.getBlocksCount();
         for (let i = 0; i < blockCount; i++) {
             const block = this.api.blocks.getBlockByIndex(i);
-            if (block?.name === 'IfEndCondition') return i
+            if (block?.name === 'EndCondition') return i
+            if (block?.name === 'ElseCondition') this.api.blocks.delete(i)
         }
     }
 

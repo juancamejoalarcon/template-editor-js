@@ -3,17 +3,14 @@ import DragDrop from 'editorjs-drag-drop';
 import Header from '@editorjs/header';
 import ColorPlugin from 'editorjs-text-color-plugin'
 import List from "@editorjs/list";
-// import Table from '@editorjs/table'
-// import Table from 'editorjs-table'
 import Table from './Table'
 import Columns from './Columns'
 import Image from './Image'
-import IfConditionTune from './IfConditionTune'
-// import { ShowIfPlugin } from '../plugins/show-if';
-import { IfCondition } from './IfCondition';
-import { IfElseCondition } from './IfElseCondition';
-import { IfEndCondition } from './IfEndCondition';
-import { IfConditionInline } from './IfConditionInline';
+import IfConditionTune from './Conditions/TuneIfCondition'
+import { IfCondition } from './Conditions/IfCondition';
+import { ElseCondition } from './Conditions/ElseCondition';
+import { EndCondition } from './Conditions/EndCondition';
+import { IfConditionInline } from './Conditions/InlineIfCondition';
 import { InsertVariable } from './InsertVariable';
 
 import { indentConditions } from '../services/condition.service'
@@ -106,9 +103,9 @@ export class TemplateEditor {
                 image: Image,
                 Columns,
                 IfCondition,
-                IfEndCondition,
+                EndCondition,
                 IfConditionInline,
-                IfElseCondition,
+                ElseCondition,
                 InsertVariable,
                 IfConditionTune,
                 ...tools

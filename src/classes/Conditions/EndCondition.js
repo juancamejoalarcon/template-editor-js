@@ -1,8 +1,8 @@
-import IfEndConditionComponent from '../components/IfEndConditionComponent.svelte'
+import ConditionComponent from '@/components/ConditionComponent.svelte'
 
-import state from '../services/state.service';
+import state from '@/services/state.service';
 
-export class IfEndCondition {
+export class EndCondition {
 
     constructor({ api }) {
         this.api = api
@@ -10,7 +10,13 @@ export class IfEndCondition {
 
     render() {
         const target = document.createElement("div");
-        const app = new IfEndConditionComponent({ target })
+        const app = new ConditionComponent({ 
+            target,
+            props: {
+                statement: 'ENDIF',
+                isEnd: true
+            }
+        })
 
         return target;
     }

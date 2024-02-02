@@ -14,7 +14,7 @@ const createIframe = () => {
 
 const addCondition = (api, start, end) => {
     api.blocks.insert("IfCondition", { skipEndBlock: true }, {}, start, true);
-    api.blocks.insert("IfEndCondition", {}, {}, end, true);
+    api.blocks.insert("EndCondition", {}, {}, end, true);
 }
 
 function checkVisible(elm) {

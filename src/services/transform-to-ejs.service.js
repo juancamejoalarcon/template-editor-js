@@ -4,11 +4,11 @@ function IfCondition({data}){
     return `<% if (${data.condition}) { %>`
 }
 
-function IfElseCondition({data}){
+function ElseCondition({data}){
     return `<% } else if (${data.condition}) { %>`
 }
 
-function IfEndCondition({data}){
+function EndCondition({data}){
     return `<% } %>`
 }
 
@@ -17,8 +17,8 @@ export const transformToEjs = (blocksData) => {
 
     const edjsParser2 = edjsHTML({
         IfCondition,
-        IfElseCondition,
-        IfEndCondition
+        ElseCondition,
+        EndCondition
     });
 
     const parsed = edjsParser2.parse(blocksData);

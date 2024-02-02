@@ -1,5 +1,5 @@
 <script>
-  import LogicIcon from '../assets/icons/logic-icon.svg?raw'
+  import LogicIcon from '@/assets/icons/logic-icon.svg?raw'
   export let onButtonClicked = () => {}
 
 </script>

@@ -31,7 +31,7 @@ export default class IfConditionTune {
             const index = this.api.blocks.getCurrentBlockIndex()
             this.api.blocks.insert("IfCondition", { skipEndBlock: true }, {}, index, true);
             setTimeout(() => {
-                this.api.blocks.insert("IfEndCondition", {}, {}, index + 2, true)
+                this.api.blocks.insert("EndCondition", {}, {}, index + 2, true)
             }, 10);
         })
 

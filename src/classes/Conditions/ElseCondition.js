@@ -1,7 +1,7 @@
-import logicIcon from '../assets/icons/logic-icon.svg?raw'
-import IfElseConditionComponent from '../components/IfElseConditionComponent.svelte'
+import logicIcon from '@/assets/icons/logic-icon.svg?raw'
+import ConditionComponent from '@/components/ConditionComponent.svelte'
 
-export class IfElseCondition {
+export class ElseCondition {
 
     static get toolbox() {
         return {
@@ -16,11 +16,16 @@ export class IfElseCondition {
 
     render() {
         const target = document.createElement("div");
-        const app = new IfElseConditionComponent({
+        const app = new ConditionComponent({
             target,
             props: {
+                statement: 'ELSE',
                 conditionChanged: (condition) => {
                     this.condition = condition
+                },
+                onRemove: () => {
+                    const index = this.api.blocks.getCurrentBlockIndex()
+                    this.api.blocks.delete(index)
                 }
             }
         })
@@ -51,7 +56,7 @@ export class IfElseCondition {
 
         for(let i = blockCount - 1; i >= 0; i--) {
             const block = this.api.blocks.getBlockByIndex(i);
-            if (block?.name === 'IfEndCondition') {
+            if (block?.name === 'EndCondition') {
                 indexOfLastEndIfCondition = i
                 break
             }

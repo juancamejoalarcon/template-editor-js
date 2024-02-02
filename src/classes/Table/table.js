@@ -1,9 +1,8 @@
 import Toolbox from './toolbox';
 import * as $ from './utils/dom';
 import throttled from './utils/throttled';
-import IfConditionComponent from '../../components/IfConditionComponent.svelte'
-import IfEndConditionComponent from '../../components/IfEndConditionComponent.svelte'
-import LogicIcon from '../../assets/icons/logic-icon.svg?raw';
+import ConditionComponent from '@/components/ConditionComponent.svelte'
+import LogicIcon from '@/assets/icons/logic-icon.svg?raw';
 
 import {
   IconDirectionLeftDown,
@@ -428,9 +427,10 @@ export default class Table {
 
     const ifConditionContainer = document.createElement('span');
     const endifConditionContainer = document.createElement('span');
-    new IfConditionComponent({ 
+    new ConditionComponent({ 
       target: ifConditionContainer, 
-      props: { 
+      props: {
+        statement: 'IF',
         inline: true, 
         onRemove: () => {
           ifConditionContainer.remove()
@@ -450,7 +450,14 @@ export default class Table {
     row.classList.add('tc-if-condition')
 
     endifConditionContainer.classList.add('endif')
-    new IfEndConditionComponent({ target: endifConditionContainer, props: { inline: true } })
+    new ConditionComponent({ 
+      target: endifConditionContainer, 
+      props: { 
+        inline: true,
+        statement: 'ENDIF',
+        isEnd: true
+      } 
+    })
     endifConditionContainer.setAttribute('contenteditable', 'false')
 
     $.insertBefore(endifConditionContainer, row.lastElementChild);

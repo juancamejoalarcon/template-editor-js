@@ -13,19 +13,19 @@ export const indentConditions = (api) => {
             indentLevel += 1
         }
 
-        if (indentLevel && block.holder && block.name !== 'IfEndCondition' && block.name !== 'IfCondition' && block.name !== 'IfElseCondition') {
+        if (indentLevel && block.holder && block.name !== 'EndCondition' && block.name !== 'IfCondition' && block.name !== 'ElseCondition') {
 
             if (indentLevel) {
                 block.holder.classList.add(`indent-${indentLevel}`)
             }
         }
 
-        if ((block.name === 'IfEndCondition' || block.name === 'IfCondition' || block.name === 'IfElseCondition') && indentLevel > 1) {
+        if ((block.name === 'EndCondition' || block.name === 'IfCondition' || block.name === 'ElseCondition') && indentLevel > 1) {
             block.holder.classList.add(`indent-${indentLevel - 1}`)
         }
-        // IfElseCondition
+        // ElseCondition
 
-        if (block.name === 'IfEndCondition') {
+        if (block.name === 'EndCondition') {
             indentLevel -= 1
         }
     }
