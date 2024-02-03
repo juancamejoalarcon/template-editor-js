@@ -11,12 +11,16 @@ export const transformToEjs = (editorData) => {
             parsedText.innerHTML = block.data.text
 
             parsedText.querySelectorAll('.condition-start').forEach((conditionEl) => {
+                const statement = conditionEl.firstElementChild.getAttribute('data-statement')
                 const condition = conditionEl.querySelector('.condition-input-edit').textContent
-                let textNode = document.createTextNode(`<% if (${condition}) { %>`);
+                const startBracket = statement === 'FOR' ? '(const ' : '('
+                const endBracket = ')'
+                let textNode = document.createTextNode(`<% ${statement.toLowerCase()} ${startBracket}${condition}${endBracket} { %>`);
                 conditionEl.replaceWith(textNode)
             })
             parsedText.querySelectorAll('.condition-end').forEach((conditionEl) => {
-                let textNode = document.createTextNode(`<% endif %>`);
+                const statement = conditionEl.firstElementChild.getAttribute('data-statement')
+                let textNode = document.createTextNode(`<% ${statement.toLowerCase()} %>`);
                 conditionEl.replaceWith(textNode)
             })
 

@@ -1,11 +1,16 @@
 <script>
-  import LogicIcon from '@/assets/icons/logic-icon.svg?raw'
+  import IfLogicIcon from '@/assets/icons/if-tool-icon.svg?raw'
+  import ForLogicIcon from '@/assets/icons/for-tool-icon.svg?raw'
   export let onButtonClicked = () => {}
+  export let type = 'if'
+
+  const marginTop = type === 'if' ? '0px' : '50px'
 
 </script>
 
 <button 
   on:click={onButtonClicked}
+  style:margin-top={marginTop}
   style="
   position: absolute;
   z-index: 99;
@@ -17,7 +22,11 @@
   border-radius: 6px;
   cursor: pointer;
 ">
-  {@html LogicIcon}
+  {#if type === 'if'}
+    {@html IfLogicIcon}
+  {:else}
+    {@html ForLogicIcon}
+  {/if}
 </button>
 
 <style lang="scss">

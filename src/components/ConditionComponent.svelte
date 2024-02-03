@@ -3,8 +3,8 @@
   export let inline = false;
   export let conditionChanged = (condition) => {}
   export let onRemove = null
-  export let condition = 'condicion == resultado'
   export let statement = 'IF'
+  export let condition = statement === 'IF' ? 'condicion == resultado' : 'item in items'
   export let isEnd = false
 
   const remove = onRemove || function () {}
@@ -12,18 +12,21 @@
   const startCondition = '['
   const endCondition = ']'
 
+  const startBracket = '('
+  const endBracket = ')'
+
   const onConditionChange = (e) => {
     condition = e.target.textContent
     conditionChanged(condition)
   }
 </script>
 
-<span class="condition-container" class:inline>
+<span class="condition-container" class:inline data-statement={statement}>
   <span>{startCondition}</span>
 
   {#if !isEnd}
     <span class="condition-input">
-      {statement} (<span on:input={onConditionChange} class="condition-input-edit" contenteditable="true">{condition}</span>)
+      {statement} {startBracket}<span on:input={onConditionChange} class="condition-input-edit" contenteditable="true">{condition}</span>{endBracket}
     </span>
   {:else}
     <span class="condition-input">

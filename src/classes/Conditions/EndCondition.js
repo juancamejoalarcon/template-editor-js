@@ -4,8 +4,9 @@ import state from '@/services/state.service';
 
 export class EndCondition {
 
-    constructor({ api }) {
+    constructor({ data, api, config}) {
         this.api = api
+        this.type = data.type || config.type
     }
 
     render() {
@@ -13,7 +14,7 @@ export class EndCondition {
         const app = new ConditionComponent({ 
             target,
             props: {
-                statement: 'ENDIF',
+                statement: this.type,
                 isEnd: true
             }
         })
@@ -37,7 +38,9 @@ export class EndCondition {
         const blockCount = this.api.blocks.getBlocksCount();
         for (let i = 0; i < blockCount; i++) {
             const block = this.api.blocks.getBlockByIndex(i);
-            if (block?.name === 'IfCondition') return i
+
+            const blockName = this.type === 'ENDIF' ? 'IfCondition' : 'ForCondition'
+            if (block?.name === blockName) return i
         }
     }
 

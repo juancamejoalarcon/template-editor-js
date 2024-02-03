@@ -15,19 +15,26 @@ export const indentConditions = (api) => {
             indentLevel += 1
         }
 
-        if (indentLevel && block.holder && block.name !== 'EndCondition' && block.name !== 'IfCondition' && block.name !== 'ElseCondition') {
+        if (block.name === 'ForCondition') {
+            indentLevel += 1
+        }
+
+        if (indentLevel && block.holder && block.name !== 'IfEndCondition' && block.name !== 'ForEndCondition' && block.name !== 'IfCondition' && block.name !== 'ForCondition' && block.name !== 'ElseCondition') {
 
             if (indentLevel) {
                 block.holder.classList.add(`indent-${indentLevel}`)
             }
         }
 
-        if ((block.name === 'EndCondition' || block.name === 'IfCondition' || block.name === 'ElseCondition') && indentLevel > 1) {
+        if ((block.name === 'IfEndCondition' || block.name === 'IfCondition' || block.name === 'ElseCondition') && indentLevel > 1) {
+            block.holder.classList.add(`indent-${indentLevel - 1}`)
+        }
+
+        if ((block.name === 'ForEndCondition' || block.name === 'ForCondition') && indentLevel > 1) {
             block.holder.classList.add(`indent-${indentLevel - 1}`)
         }
         // ElseCondition
-
-        if (block.name === 'EndCondition') {
+        if (block.name === 'IfEndCondition' || block.name === 'ForEndCondition') {
             indentLevel -= 1
         }
     }
@@ -39,9 +46,10 @@ export const reapplyConditionsToBlocks = (api) => {
         const block = api.blocks.getBlockByIndex(i);
         if (block.name === 'header' || block.name === 'paragraph') {
             block.holder.querySelectorAll('.condition-start').forEach(element => {
+                const statement = element.firstElementChild.getAttribute('data-statement')
                 const condition = element.querySelector('.condition-input-edit').textContent
                 const id = Array.from(element.classList).find(className => className.includes('condition-id-'))
-                const { ifConditionContainer, endifConditionContainer } = getConditionContainers(id, condition)
+                const { ifConditionContainer, endifConditionContainer } = getConditionContainers(id, condition, statement.toLowerCase())
 
                 const currentEnd = block.holder.querySelector('.condition-end.' + id)
                 element.replaceWith(ifConditionContainer)
@@ -53,15 +61,15 @@ export const reapplyConditionsToBlocks = (api) => {
     }
 }
 
-export const getConditionContainers = (randomId, conditionText) => {
-    const condition = conditionText || 'condicion == resultado'
+export const getConditionContainers = (randomId, conditionText, type = 'if') => {
+    const condition = conditionText || type === 'if' ? 'condicion == resultado' : 'item in items'
     const ifConditionContainer = document.createElement('span');
     ifConditionContainer.classList.add('condition-start')
     ifConditionContainer.classList.add(randomId)
-    new ConditionComponent({ 
-        target: ifConditionContainer, 
+    new ConditionComponent({
+        target: ifConditionContainer,
         props: {
-            statement: 'IF',
+            statement: type === 'if' ? 'IF' : 'FOR',
             inline: true,
             condition,
             onRemove: () => {
@@ -70,7 +78,7 @@ export const getConditionContainers = (randomId, conditionText) => {
                     container.remove()
                 })
             }
-        } 
+        }
     })
 
     ifConditionContainer.setAttribute('contenteditable', 'false');
@@ -78,13 +86,13 @@ export const getConditionContainers = (randomId, conditionText) => {
     const endifConditionContainer = document.createElement('span');
     endifConditionContainer.classList.add('condition-end')
     endifConditionContainer.classList.add(randomId)
-    new ConditionComponent({ 
-        target: endifConditionContainer, 
+    new ConditionComponent({
+        target: endifConditionContainer,
         props: {
-            statement: 'ENDIF',
+            statement: type === 'if' ? 'ENDIF' : 'ENDFOR',
             inline: true,
             isEnd: true
-        } 
+        }
     })
 
     endifConditionContainer.setAttribute('contenteditable', 'false')
@@ -97,10 +105,10 @@ export const getConditionContainers = (randomId, conditionText) => {
 }
 
 export const onRemoveObserver = (el, randomId) => {
-    const observer = new MutationObserver(function(mutations_list) {
-        mutations_list.forEach(function(mutation) {
-            mutation.removedNodes.forEach(function(removed_node) {
-                if(removed_node.classList.contains(randomId)) {
+    const observer = new MutationObserver(function (mutations_list) {
+        mutations_list.forEach(function (mutation) {
+            mutation.removedNodes.forEach(function (removed_node) {
+                if (removed_node.classList.contains(randomId)) {
                     const containers = el.parentElement?.querySelectorAll(`.${randomId}`)
                     containers?.forEach((container) => {
                         container.remove()
@@ -110,6 +118,6 @@ export const onRemoveObserver = (el, randomId) => {
             });
         });
     });
-    
+
     observer.observe(el.parentElement, { subtree: false, childList: true });
 }

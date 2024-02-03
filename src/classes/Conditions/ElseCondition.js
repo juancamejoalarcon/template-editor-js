@@ -10,8 +10,14 @@ export class ElseCondition {
         };
     }
 
-    constructor({ api }) {
+    constructor({ api, data = { condition: '' } }) {
         this.api = api
+
+        this.condition = data.condition || this.getDefaultCondition()
+    }
+
+    getDefaultCondition() {
+        return 'condicion == resultado'
     }
 
     render() {
@@ -20,6 +26,7 @@ export class ElseCondition {
             target,
             props: {
                 statement: 'ELSE',
+                condition: this.condition,
                 conditionChanged: (condition) => {
                     this.condition = condition
                 },
@@ -56,7 +63,7 @@ export class ElseCondition {
 
         for(let i = blockCount - 1; i >= 0; i--) {
             const block = this.api.blocks.getBlockByIndex(i);
-            if (block?.name === 'EndCondition') {
+            if (block?.name === 'IfEndCondition') {
                 indexOfLastEndIfCondition = i
                 break
             }

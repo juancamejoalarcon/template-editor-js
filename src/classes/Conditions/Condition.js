@@ -2,24 +2,30 @@ import logicIcon from '@/assets/icons/logic-icon.svg?raw'
 import ConditionComponent from '@/components/ConditionComponent.svelte'
 import state from '@/services/state.service';
 
-const defaultCondition = 'condicion == resultado'
 
-export class IfCondition {
+export class Condition {
 
-    static get toolbox() {
-        return {
-            title: "IF",
-            icon: logicIcon,
-        };
-    }
 
-    constructor({ api, data = { skipEndBlock: false, type: '', condition: '' } }) {
+    constructor({ api, data = { skipEndBlock: false, type: '', condition: '' }, config = { type: 'if' }}) {
         this.api = api
 
         if (!state.api) state.setApi(api)
 
         this.skipEndBlock = data.skipEndBlock || data.type
-        this.condition = data.condition || defaultCondition
+        
+        this.type = config.type 
+        this.condition = data.condition || this.getDefaultCondition()
+    }
+
+    static get toolbox() {
+        return {
+            icon: logicIcon,
+        };
+    }
+
+    getDefaultCondition() {
+        if (this.type === 'if') return 'condicion == resultado'
+        if (this.type === 'for') return 'item in items'
     }
 
     render() {
@@ -27,7 +33,7 @@ export class IfCondition {
         const app = new ConditionComponent({
             target,
             props: {
-                statement: 'IF',
+                statement: this.type.toUpperCase(),
                 condition: this.condition,
                 conditionChanged: (condition) => {
                     this.condition = condition
@@ -45,7 +51,9 @@ export class IfCondition {
     addEndBlock() {
         if (this.skipEndBlock) return
         const index = this.api.blocks.getCurrentBlockIndex() + 1
-        this.api.blocks.insert("EndCondition", {}, {}, index, true);
+        const type = this.type === 'if' ? 'IfEndCondition' : 'ForEndCondition'
+
+        this.api.blocks.insert(type, { type: this.type === 'if' ? 'ENDIF' : 'ENDFOR'  }, { }, index, true);
     }
 
     destroy() {
@@ -66,14 +74,15 @@ export class IfCondition {
         const blockCount = this.api.blocks.getBlocksCount();
         for (let i = 0; i < blockCount; i++) {
             const block = this.api.blocks.getBlockByIndex(i);
-            if (block?.name === 'EndCondition') return i
-            if (block?.name === 'ElseCondition') this.api.blocks.delete(i)
+            const endBlockName = this.type === 'if' ? 'IfEndCondition' : 'ForEndCondition'
+            if (block?.name === endBlockName) return i
+            if (this.type === 'if' && block?.name === 'ElseCondition') this.api.blocks.delete(i)
         }
     }
 
     save() {
         return {
-            type: 'IF',
+            type: this.type.toUpperCase(),
             condition: this.condition
         };
     }

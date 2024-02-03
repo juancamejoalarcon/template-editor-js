@@ -1,20 +1,21 @@
-import AddConditionButton from '../components/AddConditionButton.svelte'
+import AddConditionButton from '@/components/AddConditionButton.svelte'
 
 const createIframe = () => {
     const iframe = document.createElement('iframe');
     iframe.style.position = 'absolute'
     iframe.style.top = '0'
     iframe.style.width = '60px'
-    iframe.style.height = '60px'
+    iframe.style.height = '120px'
     iframe.style.right = '0'
     iframe.style.border = 'none'
     iframe.style.zIndex = '99'
     return iframe
 }
 
-const addCondition = (api, start, end) => {
-    api.blocks.insert("IfCondition", { skipEndBlock: true }, {}, start, true);
-    api.blocks.insert("EndCondition", {}, {}, end, true);
+const addCondition = (api, start, end, type) => {
+
+    api.blocks.insert(type === 'if' ? "IfCondition" : "ForCondition", { skipEndBlock: true }, {}, start, true);
+    api.blocks.insert(type === 'if' ? "IfEndCondition" : "ForEndCondition", {}, {}, end, true);
 }
 
 function checkVisible(elm) {
@@ -76,9 +77,21 @@ export const onSelectionChanged = (api) => {
 
             new AddConditionButton({ 
                 target: iframe.contentDocument.body,
-                props: { 
+                props: {
+                    type: 'if',
                     onButtonClicked: () => {
-                        addCondition(api, start - 1, end + 1)
+                        addCondition(api, start - 1, end + 1, 'if')
+                        iframe.remove()
+                    }
+                } 
+            })
+
+            new AddConditionButton({ 
+                target: iframe.contentDocument.body,
+                props: {
+                    type: 'for',
+                    onButtonClicked: () => {
+                        addCondition(api, start - 1, end + 1, 'for')
                         iframe.remove()
                     }
                 } 

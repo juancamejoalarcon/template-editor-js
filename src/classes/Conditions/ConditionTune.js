@@ -4,10 +4,12 @@
 
 import logicIcon from '@/assets/icons/logic-icon.svg?raw'
 
-export default class IfConditionTune {
+export default class ConditionTune {
 
-    constructor({ api }) {
+    constructor({ api, config }) {
         this.api = api;
+
+        this.type = config.type
     }
 
     static get isTune() {
@@ -24,14 +26,16 @@ export default class IfConditionTune {
                 ${logicIcon}
             </div>
             <div class="ce-popover-item__title">
-                IF
+                ${this.type === 'if' ? 'IF' : 'FOR'}
             </div>
             `
         ifConditionButton.addEventListener('click', () => {
             const index = this.api.blocks.getCurrentBlockIndex()
-            this.api.blocks.insert("IfCondition", { skipEndBlock: true }, {}, index, true);
+            const blockName = this.type === 'if' ? "IfCondition" : "ForCondition"
+            this.api.blocks.insert(blockName, { skipEndBlock: true }, {}, index, true);
             setTimeout(() => {
-                this.api.blocks.insert("EndCondition", {}, {}, index + 2, true)
+                const endBlockName = this.type === 'if' ? "IfEndCondition" : "ForEndCondition"
+                this.api.blocks.insert(endBlockName, {}, {}, index + 2, true)
             }, 10);
         })
 

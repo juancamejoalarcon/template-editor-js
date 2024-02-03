@@ -6,11 +6,11 @@ import List from "@editorjs/list";
 import Table from './Table'
 import Columns from './Columns'
 import Image from './Image'
-import IfConditionTune from './Conditions/TuneIfCondition'
-import { IfCondition } from './Conditions/IfCondition';
+import ConditionTune from './Conditions/ConditionTune'
+import { Condition } from './Conditions/Condition';
 import { ElseCondition } from './Conditions/ElseCondition';
 import { EndCondition } from './Conditions/EndCondition';
-import { IfConditionInline } from './Conditions/InlineIfCondition';
+import { InlineCondition } from './Conditions/InlineCondition';
 import { InsertVariable } from './InsertVariable';
 
 import { indentConditions, reapplyConditionsToBlocks } from '../services/condition.service'
@@ -65,7 +65,7 @@ export class TemplateEditor {
                 if (!this.api) this.api = API
                 onChange()
             },
-            tunes: ['IfConditionTune'],
+            tunes: ['IfConditionTune', 'ForConditionTune'],
             tools: {
                 header: {
                     class: Header,
@@ -109,18 +109,63 @@ export class TemplateEditor {
                     }
                 },
                 If: {
-                    class: IfConditionInline,
+                    class: InlineCondition,
                     config: {
-
+                        type: 'if'
                     }
+                },
+                For: {
+                    class: InlineCondition,
+                    config: {
+                        type: 'for'
+                    }
+                },
+                IfConditionTune: {
+                    class: ConditionTune,
+                    config: {
+                        type: 'if'
+                    }
+                },
+                ForConditionTune: {
+                    class: ConditionTune,
+                    config: {
+                        type: 'for'
+                    }
+                },
+                IfCondition: {
+                    class: Condition,
+                    config: {
+                        type: 'if'
+                    },
+                    toolbox: {
+                        title: 'IF',
+                    }
+                },
+                ElseCondition,
+                ForCondition: {
+                    class: Condition,
+                    config: {
+                        type: 'for'
+                    },
+                    toolbox: {
+                        title: 'FOR',
+                    }
+                },
+                IfEndCondition: {
+                    class: EndCondition,
+                    config: {
+                        type: 'ENDIF'
+                    },
+                },
+                ForEndCondition: {
+                    class: EndCondition,
+                    config: {
+                        type: 'ENDFOR'
+                    },
                 },
                 image: Image,
                 // Columns,
-                IfCondition,
-                EndCondition,
-                ElseCondition,
                 InsertVariable,
-                IfConditionTune,
                 ...tools
             },
         })
